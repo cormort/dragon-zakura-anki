@@ -51,6 +51,7 @@
   .btn.on, .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
   .opts { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 0.82rem; color: var(--sub); }
   .opts label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .opts label[hidden] { display: none; }
   .opts select { border: 1px solid var(--border); background: var(--card); border-radius: 6px; padding: 2px 4px; }
   .stats { display: flex; gap: 6px; font-size: 0.78rem; font-weight: 600; margin-left: auto; }
   .pill { padding: 3px 9px; border-radius: 6px; background: var(--muted-bg); color: var(--sub); }
@@ -144,6 +145,7 @@
     <div class="bar">
       <div class="opts">
         <label><input type="checkbox" id="autoSpeak"> 翻開自動朗讀</label>
+        <label id="firstLetterLbl"><input type="checkbox" id="firstLetter"> 填空首字提示</label>
         <label>語速 <select id="rateSel"><option value="0.7">0.7×</option><option value="0.85">0.85×</option><option value="1">1×</option></select></label>
       </div>
       <div class="stats">
@@ -211,7 +213,7 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
-const prefs = Object.assign({ deck: 0, mode: 'flip', zhToEn: true, autoSpeak: true, rate: '0.85' }, store.get('prefs', {}));
+const prefs = Object.assign({ deck: 0, mode: 'flip', zhToEn: true, autoSpeak: true, rate: '0.85', firstLetter: true }, store.get('prefs', {}));
 const savePrefs = () => store.set('prefs', prefs);
 
 let D, progress, deck, idx = 0, revealed = false, onlyNew = false;
@@ -223,12 +225,12 @@ const norm = w => w.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9']/
 const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
 // 隱藏約一半長度 ≥4 的字，保留首字母提示；固定規則，同一句每次挖一樣的空
-function cloze(en) {
+function cloze(en, hint) {
   let n = 0;
   return en.split(/(\s+)/).map(tok => {
     const m = tok.match(/^([^A-Za-z]*)([A-Za-z][A-Za-z'’-]{3,})([^A-Za-z]*)$/);
     if (!m || n++ % 2) return esc(tok);
-    return esc(m[1]) + `<span class="blank">${m[2][0]}${'_'.repeat(m[2].length - 1)}</span>` + esc(m[3]);
+    return esc(m[1]) + `<span class="blank">${hint ? m[2][0] : '_'}${'_'.repeat(m[2].length - 1)}</span>` + esc(m[3]);
   }).join('');
 }
 
@@ -273,6 +275,8 @@ function render() {
   $('dirBtn').textContent = prefs.zhToEn ? '中 → 英' : '英 → 中';
   $('filterBtn').classList.toggle('on', onlyNew);
   $('autoSpeak').checked = prefs.autoSpeak;
+  $('firstLetter').checked = prefs.firstLetter;
+  $('firstLetterLbl').hidden = mode !== 'cloze';
   $('rateSel').value = prefs.rate;
   revealed = false;
   $('ans').classList.remove('visible');
@@ -296,7 +300,7 @@ function render() {
 
   const enFront = mode === 'cloze' || (mode === 'flip' && !prefs.zhToEn);
   $('q').className = enFront ? 'q en' : 'q';
-  if (mode === 'cloze') $('q').innerHTML = cloze(it.en);
+  if (mode === 'cloze') $('q').innerHTML = cloze(it.en, prefs.firstLetter);
   else $('q').textContent = enFront ? it.en : it.zh;
 
   const enBack = mode !== 'flip' || prefs.zhToEn;
@@ -385,6 +389,7 @@ $('shuffleBtn').onclick = () => {
 };
 $('filterBtn').onclick = () => { onlyNew = !onlyNew; deck = onlyNew ? D.items.filter(c => !mastered(c.id)) : [...D.items]; idx = 0; render(); };
 $('autoSpeak').onchange = e => { prefs.autoSpeak = e.target.checked; savePrefs(); };
+$('firstLetter').onchange = e => { prefs.firstLetter = e.target.checked; savePrefs(); render(); };
 $('rateSel').onchange = e => { prefs.rate = e.target.value; savePrefs(); };
 $('speakBtn').onclick = e => { e.stopPropagation(); speak(); };
 $('card').onclick = e => { if (prefs.mode !== 'dict' && !e.target.closest('button')) reveal(); };
