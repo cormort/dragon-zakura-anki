@@ -3,19 +3,436 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>龍櫻英文 ANKI 閃卡</title>
+<title>龍櫻英文閃卡</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="龍櫻閃卡">
 <style>
-  body { font-family: -apple-system, "Noto Sans TC", sans-serif; background: #f8fafc; color: #0f172a; max-width: 640px; margin: 48px auto; padding: 0 16px; }
-  h1 { font-size: 1.5rem; }
-  a.card { display: block; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 16px 0; text-decoration: none; color: inherit; }
-  a.card:hover { border-color: #2563eb; }
-  a.card h2 { font-size: 1.1rem; margin: 0 0 6px; }
-  a.card p { margin: 0; color: #475569; font-size: 0.9rem; }
+  :root {
+    --primary: #2563eb; --primary-soft: #2563eb18;
+    --bg: #f8fafc; --card: #ffffff; --muted-bg: #f1f5f9;
+    --text: #0f172a; --sub: #475569; --faint: #94a3b8; --border: #e2e8f0;
+    --again: #ef4444; --hard: #f59e0b; --good: #10b981; --easy: #3b82f6;
+    --ok: #059669; --miss: #dc2626; --miss-bg: #fee2e2; --ok-bg: #d1fae5;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --primary: #60a5fa; --primary-soft: #60a5fa22;
+      --bg: #0b1120; --card: #111827; --muted-bg: #1f2937;
+      --text: #e5e7eb; --sub: #9ca3af; --faint: #6b7280; --border: #1f2937;
+      --ok: #34d399; --miss: #f87171; --miss-bg: #7f1d1d55; --ok-bg: #064e3b66;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans TC", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 48px; }
+  button, select, input, textarea { font: inherit; color: inherit; }
+
+  header { background: var(--card); border-bottom: 1px solid var(--border); padding: 10px 16px; position: sticky; top: 0; z-index: 10; }
+  .header-inner { max-width: 880px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .deck-select { font-weight: 700; font-size: 1rem; border: 1px solid var(--border); background: var(--card); border-radius: 8px; padding: 6px 10px; flex: 1 1 200px; min-width: 0; }
+  .tabs { display: flex; gap: 4px; background: var(--muted-bg); padding: 3px; border-radius: 9px; }
+  .tab { border: none; background: transparent; padding: 6px 12px; border-radius: 7px; font-size: 0.85rem; font-weight: 600; color: var(--sub); cursor: pointer; white-space: nowrap; }
+  .tab.active { background: var(--card); color: var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,.1); }
+
+  .container { max-width: 880px; margin: 16px auto; padding: 0 16px; }
+  .panel { display: none; } .panel.active { display: block; }
+
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .seg { display: inline-flex; background: var(--muted-bg); border-radius: 8px; padding: 3px; }
+  .seg button { border: none; background: transparent; padding: 5px 10px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--sub); cursor: pointer; }
+  .seg button.active { background: var(--card); color: var(--primary); box-shadow: 0 1px 2px rgba(0,0,0,.1); }
+  .btn { border: 1px solid var(--border); background: var(--card); padding: 5px 11px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+  .btn:hover { border-color: var(--faint); }
+  .btn.on, .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .opts { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 0.82rem; color: var(--sub); }
+  .opts label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .opts select { border: 1px solid var(--border); background: var(--card); border-radius: 6px; padding: 2px 4px; }
+  .stats { display: flex; gap: 6px; font-size: 0.78rem; font-weight: 600; margin-left: auto; }
+  .pill { padding: 3px 9px; border-radius: 6px; background: var(--muted-bg); color: var(--sub); }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 28px; min-height: 300px; display: flex; flex-direction: column; box-shadow: 0 8px 24px -8px rgba(0,0,0,.08); user-select: none; touch-action: pan-y; }
+  .card.flippable { cursor: pointer; }
+  .card-top { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; font-weight: 600; color: var(--sub); }
+  .num { background: var(--muted-bg); padding: 2px 10px; border-radius: 99px; color: var(--text); }
+  .speak { border: none; background: var(--primary-soft); color: var(--primary); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; }
+  .card-body { flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 20px 0; }
+  .q { font-size: 1.45rem; font-weight: 700; line-height: 1.5; }
+  .q.en { font-family: Georgia, "Times New Roman", serif; font-weight: 600; }
+  .hint-zh { margin-top: 10px; color: var(--sub); font-size: 1rem; }
+  .blank { color: var(--primary); border-bottom: 2px solid var(--primary); letter-spacing: 0.05em; }
+  .answer { margin-top: 20px; padding-top: 18px; border-top: 2px dashed var(--border); display: none; }
+  .answer.visible { display: block; animation: fade .2s ease; }
+  .a { font-size: 1.3rem; font-weight: 600; color: var(--primary); line-height: 1.5; }
+  .a.en { font-family: Georgia, "Times New Roman", serif; }
+  .jp { margin-top: 10px; font-size: 0.9rem; color: var(--sub); }
+  .tip { text-align: center; font-size: 0.78rem; color: var(--faint); }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  .dict { margin-top: 18px; text-align: left; user-select: text; }
+  .dict textarea { width: 100%; min-height: 84px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); font-family: Georgia, "Times New Roman", serif; font-size: 1.1rem; resize: vertical; }
+  .dict textarea:focus { outline: 2px solid var(--primary); outline-offset: -1px; }
+  .dict-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 0.8rem; color: var(--faint); gap: 8px; }
+  .diff { font-family: Georgia, "Times New Roman", serif; font-size: 1.2rem; line-height: 1.9; text-align: left; }
+  .diff .ok { color: var(--ok); }
+  .diff .miss { color: var(--miss); background: var(--miss-bg); border-radius: 4px; padding: 0 3px; font-weight: 700; }
+  .score { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; text-align: left; }
+  .yours { margin-top: 8px; font-size: 0.85rem; color: var(--sub); text-align: left; }
+
+  .rating { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+  .rating[hidden] { display: none; }
+  .rate { border: none; padding: 11px 6px; border-radius: 12px; color: #fff; font-weight: 700; font-size: 0.92rem; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+  .rate small { font-size: 0.7rem; font-weight: 400; opacity: .92; }
+  .rate:hover { filter: brightness(1.06); }
+  .r-again { background: var(--again); } .r-hard { background: var(--hard); } .r-good { background: var(--good); } .r-easy { background: var(--easy); }
+  .reveal { width: 100%; margin-top: 14px; padding: 13px; border-radius: 12px; border: 2px dashed var(--border); background: transparent; color: var(--sub); font-weight: 700; cursor: pointer; }
+  .reveal[hidden] { display: none; }
+  .nav { display: flex; justify-content: space-between; gap: 8px; margin-top: 14px; }
+
+  .search { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; background: var(--card); }
+  .list { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .row { display: grid; grid-template-columns: 44px 1fr 40px; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--border); align-items: start; }
+  .row:last-child { border-bottom: none; }
+  .row .id { color: var(--faint); font-size: 0.8rem; padding-top: 2px; }
+  .row .en { font-weight: 600; font-family: Georgia, "Times New Roman", serif; }
+  .row .zh { color: var(--sub); font-size: 0.92rem; }
+  .row .jp { margin-top: 2px; font-size: 0.8rem; color: var(--faint); }
+  .row .st { font-size: 0.75rem; margin-left: 6px; }
+  .export { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .export p { color: var(--sub); font-size: 0.9rem; margin: 6px 0 14px; }
+  .export textarea { width: 100%; height: 300px; margin-top: 12px; padding: 12px; border-radius: 8px; border: 1px solid var(--border); font-family: monospace; font-size: 0.82rem; background: var(--bg); }
+
+  @media (max-width: 640px) {
+    .card { padding: 18px 16px; min-height: 260px; }
+    .q { font-size: 1.2rem; } .a { font-size: 1.1rem; } .diff { font-size: 1.05rem; }
+    .rating { grid-template-columns: repeat(2, 1fr); }
+    .stats { margin-left: 0; }
+    .tab { padding: 6px 9px; }
+    .kbd-only { display: none; }
+  }
 </style>
 </head>
 <body>
-<h1>龍櫻英文 ANKI 閃卡</h1>
-<a class="card" href="quotes.html"><h2>教材 1 · 龍櫻 100 例句：勵志名言篇</h2><p>100 句英文名言，中英對照</p></a>
-<a class="card" href="composition.html"><h2>教材 2 · 龍櫻基本英文 100：竹岡廣信英作文篇</h2><p>100 句實用英作文，中英日對照</p></a>
+
+<header>
+  <div class="header-inner">
+    <select class="deck-select" id="deckSel" aria-label="選擇教材"></select>
+    <nav class="tabs">
+      <button class="tab active" data-tab="study">背誦</button>
+      <button class="tab" data-tab="list">總覽</button>
+      <button class="tab" data-tab="export">匯出 Anki</button>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section id="view-study" class="panel active">
+    <div class="bar">
+      <div class="seg" id="modeSeg" role="group" aria-label="練習模式">
+        <button data-mode="flip">翻牌</button>
+        <button data-mode="cloze">填空</button>
+        <button data-mode="dict">默寫</button>
+      </div>
+      <button class="btn" id="dirBtn"></button>
+      <button class="btn" id="shuffleBtn">🔀 洗牌</button>
+      <button class="btn" id="filterBtn">只看未熟記</button>
+    </div>
+    <div class="bar">
+      <div class="opts">
+        <label><input type="checkbox" id="autoSpeak"> 翻開自動朗讀</label>
+        <label>語速 <select id="rateSel"><option value="0.7">0.7×</option><option value="0.85">0.85×</option><option value="1">1×</option></select></label>
+      </div>
+      <div class="stats">
+        <span class="pill" id="stPos"></span>
+        <span class="pill" id="stLearn" style="background:#fef3c7;color:#92400e"></span>
+        <span class="pill" id="stDone" style="background:#d1fae5;color:#065f46"></span>
+      </div>
+    </div>
+
+    <div class="card" id="card">
+      <div class="card-top">
+        <span class="num" id="num"></span>
+        <button class="speak" id="speakBtn" title="朗讀英文 (R)" aria-label="朗讀英文">🔊</button>
+      </div>
+      <div class="card-body">
+        <div class="q" id="q"></div>
+        <div class="hint-zh" id="hintZh"></div>
+        <div class="dict" id="dict">
+          <textarea id="dictInput" placeholder="在這裡默寫英文句子…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+          <div class="dict-row"><span class="kbd-only">Enter 對答案 · Shift+Enter 換行</span><button class="btn btn-primary" id="checkBtn">對答案</button></div>
+        </div>
+        <div class="answer" id="ans">
+          <div id="aBox"></div>
+          <div class="jp" id="jp"></div>
+        </div>
+      </div>
+      <div class="tip" id="tip"></div>
+    </div>
+
+    <button class="reveal" id="revealBtn">翻開答案 <span class="kbd-only">(Space)</span></button>
+    <div class="rating" id="rating" hidden>
+      <button class="rate r-again" data-rate="again">1 重來<small>3 張後再出現</small></button>
+      <button class="rate r-hard" data-rate="hard">2 困難<small>8 張後再出現</small></button>
+      <button class="rate r-good" data-rate="good">3 良好<small>標記熟記</small></button>
+      <button class="rate r-easy" data-rate="easy">4 簡單<small>標記熟記</small></button>
+    </div>
+
+    <div class="nav">
+      <button class="btn" id="prevBtn">← 上一張</button>
+      <button class="btn" id="resetBtn">重設本教材紀錄</button>
+      <button class="btn" id="nextBtn">下一張 →</button>
+    </div>
+  </section>
+
+  <section id="view-list" class="panel">
+    <input type="search" class="search" id="search" placeholder="搜尋中英文關鍵字或題號…">
+    <div class="list" id="list"></div>
+  </section>
+
+  <section id="view-export" class="panel">
+    <div class="export">
+      <h3>匯入至 Anki 桌面版 / AnkiDroid / AnkiMobile</h3>
+      <p>Tab 分隔的 .txt 檔：正面中文、背面英文（教材 2 附日文原句）、第三欄為標籤。</p>
+      <button class="btn btn-primary" id="dlBtn">下載匯入檔 (.txt)</button>
+      <button class="btn" id="copyBtn">複製全部</button>
+      <textarea id="tsv" readonly></textarea>
+    </div>
+  </section>
+</main>
+
+<script src="data.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+const prefs = Object.assign({ deck: 0, mode: 'flip', zhToEn: true, autoSpeak: true, rate: '0.85' }, store.get('prefs', {}));
+const savePrefs = () => store.set('prefs', prefs);
+
+let D, progress, deck, idx = 0, revealed = false, onlyNew = false;
+const mastered = id => progress[id] === 'good' || progress[id] === 'easy';
+const pad = n => '#' + String(n).padStart(3, '0');
+
+// ---- pure helpers: cloze & word diff ----
+const norm = w => w.toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z0-9']/g, '');
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+// 隱藏約一半長度 ≥4 的字，保留首字母提示；固定規則，同一句每次挖一樣的空
+function cloze(en) {
+  let n = 0;
+  return en.split(/(\s+)/).map(tok => {
+    const m = tok.match(/^([^A-Za-z]*)([A-Za-z][A-Za-z'’-]{3,})([^A-Za-z]*)$/);
+    if (!m || n++ % 2) return esc(tok);
+    return esc(m[1]) + `<span class="blank">${m[2][0]}${'_'.repeat(m[2].length - 1)}</span>` + esc(m[3]);
+  }).join('');
+}
+
+// LCS 比對：標出答案中哪些字有寫對
+function diffWords(answer, typed) {
+  const A = answer.split(/\s+/).filter(Boolean), a = A.map(norm);
+  const b = typed.split(/\s+/).map(norm).filter(Boolean);
+  const L = Array.from({ length: a.length + 1 }, () => new Array(b.length + 1).fill(0));
+  for (let i = a.length - 1; i >= 0; i--)
+    for (let j = b.length - 1; j >= 0; j--)
+      L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const ok = new Array(a.length).fill(false);
+  for (let i = 0, j = 0; i < a.length && j < b.length;) {
+    if (a[i] === b[j]) { ok[i++] = true; j++; }
+    else if (L[i + 1][j] >= L[i][j + 1]) i++; else j++;
+  }
+  return { words: A, ok, score: Math.round(100 * ok.filter(Boolean).length / A.length) };
+}
+
+// ---- deck ----
+function loadDeck(i) {
+  prefs.deck = i; savePrefs();
+  D = DECKS[i];
+  progress = store.get(D.key, {});
+  document.documentElement.style.setProperty('--primary', i ? '#059669' : '');
+  deck = onlyNew ? D.items.filter(c => !mastered(c.id)) : [...D.items];
+  idx = 0;
+  render(); renderList(); $('tsv').value = tsv();
+}
+
+function stats() {
+  const v = Object.values(progress);
+  $('stPos').textContent = `${deck.length ? idx + 1 : 0} / ${deck.length}`;
+  $('stLearn').textContent = `待複習 ${v.filter(s => s === 'again' || s === 'hard').length}`;
+  $('stDone').textContent = `熟記 ${v.filter(s => s === 'good' || s === 'easy').length}`;
+}
+
+function render() {
+  const mode = prefs.mode;
+  document.querySelectorAll('#modeSeg button').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  $('dirBtn').hidden = mode !== 'flip';
+  $('dirBtn').textContent = prefs.zhToEn ? '中 → 英' : '英 → 中';
+  $('filterBtn').classList.toggle('on', onlyNew);
+  $('autoSpeak').checked = prefs.autoSpeak;
+  $('rateSel').value = prefs.rate;
+  revealed = false;
+  $('ans').classList.remove('visible');
+  $('rating').hidden = true;
+  $('card').classList.toggle('flippable', mode !== 'dict');
+  stats();
+
+  if (!deck.length) {
+    $('num').textContent = '完成';
+    $('q').className = 'q'; $('q').textContent = '🎉 篩選範圍內的卡片都已熟記！';
+    $('hintZh').textContent = ''; $('dict').hidden = true; $('revealBtn').hidden = true; $('tip').textContent = '';
+    return;
+  }
+  idx = (idx + deck.length) % deck.length;
+  const it = deck[idx], st = progress[it.id];
+  $('num').textContent = pad(it.id) + (mastered(it.id) ? ' · ✅ 熟記' : st ? ' · 🔥 待複習' : '');
+  $('jp').textContent = it.jp ? '日文原句：' + it.jp : '';
+  $('dict').hidden = mode !== 'dict';
+  $('revealBtn').hidden = mode === 'dict';
+  $('hintZh').textContent = mode === 'cloze' ? it.zh : '';
+
+  const enFront = mode === 'cloze' || (mode === 'flip' && !prefs.zhToEn);
+  $('q').className = enFront ? 'q en' : 'q';
+  if (mode === 'cloze') $('q').innerHTML = cloze(it.en);
+  else $('q').textContent = enFront ? it.en : it.zh;
+
+  const enBack = mode !== 'flip' || prefs.zhToEn;
+  $('aBox').innerHTML = `<div class="a ${enBack ? 'en' : ''}">${esc(enBack ? it.en : it.zh)}</div>`;
+  if (mode === 'dict') { $('dictInput').value = ''; $('dictInput').disabled = false; }
+  $('tip').innerHTML = mode === 'dict' ? '' : '<span class="kbd-only">點卡片或 Space 翻開 · R 朗讀 · ←/→ 切換</span><span class="touch-hint"></span>';
+}
+
+function reveal() {
+  if (!deck.length || revealed) return;
+  revealed = true;
+  if (prefs.mode === 'dict') {
+    const it = deck[idx], r = diffWords(it.en, $('dictInput').value);
+    $('aBox').innerHTML = `<div class="score">正確率 ${r.score}%</div><div class="diff">${
+      r.words.map((w, i) => `<span class="${r.ok[i] ? 'ok' : 'miss'}">${esc(w)}</span>`).join(' ')
+    }</div>` + ($('dictInput').value.trim() ? `<div class="yours">你寫的：${esc($('dictInput').value)}</div>` : '');
+    $('dictInput').disabled = true;
+    $('dict').hidden = true;
+  }
+  $('ans').classList.add('visible');
+  $('revealBtn').hidden = true;
+  $('rating').hidden = false;
+  if (prefs.autoSpeak) speak();
+}
+
+function go(step) {
+  if (!deck.length) return;
+  idx += step; render();
+  if (prefs.mode === 'dict') $('dictInput').focus();
+}
+
+function rate(level) {
+  if (!revealed || !deck.length) return;
+  const it = deck[idx];
+  progress[it.id] = level;
+  store.set(D.key, progress);
+  if (level === 'again' || level === 'hard') {
+    // 拿出來，插回 3 / 8 張之後；目前位置自動變成下一張
+    deck.splice(idx, 1);
+    deck.splice(Math.min(idx + (level === 'again' ? 3 : 8), deck.length), 0, it);
+    if (deck.length === 1) idx = 0;
+    render();
+  } else if (onlyNew) {
+    deck.splice(idx, 1); render();
+  } else {
+    idx++; render();
+  }
+  if (prefs.mode === 'dict' && deck.length) $('dictInput').focus();
+}
+
+function speak(text) {
+  if (!('speechSynthesis' in window) || (!text && !deck.length)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text || deck[idx].en);
+  u.lang = 'en-US'; u.rate = +prefs.rate;
+  speechSynthesis.speak(u);
+}
+
+// ---- list & export ----
+function renderList() {
+  const q = $('search').value.trim().toLowerCase();
+  $('list').innerHTML = D.items.filter(it =>
+    !q || String(it.id).includes(q) || it.en.toLowerCase().includes(q) || it.zh.includes(q) || (it.jp || '').includes(q)
+  ).map(it => `<div class="row"><span class="id">${pad(it.id)}</span><div>
+      <div class="en">${esc(it.en)}${mastered(it.id) ? '<span class="st">✅</span>' : progress[it.id] ? '<span class="st">🔥</span>' : ''}</div>
+      <div class="zh">${esc(it.zh)}</div>${it.jp ? `<div class="jp">${esc(it.jp)}</div>` : ''}
+    </div><button class="speak" data-say="${it.id}" aria-label="朗讀">🔊</button></div>`).join('');
+}
+const tsv = () => D.items.map(it =>
+  `${it.zh}\t${it.jp ? `${it.en}<br><small style="color:gray">${it.jp}</small>` : it.en}\t${D.sub.replace(/\s+/g, '_')}`
+).join('\n');
+
+// ---- events ----
+DECKS.forEach((d, i) => $('deckSel').add(new Option(`${d.title}（${d.items.length} 句）`, i)));
+$('deckSel').onchange = e => loadDeck(+e.target.value);
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === b));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'view-' + b.dataset.tab));
+  if (b.dataset.tab === 'list') renderList();
+});
+document.querySelectorAll('#modeSeg button').forEach(b => b.onclick = () => { prefs.mode = b.dataset.mode; savePrefs(); render(); });
+$('dirBtn').onclick = () => { prefs.zhToEn = !prefs.zhToEn; savePrefs(); render(); };
+$('shuffleBtn').onclick = () => {
+  for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+  idx = 0; render();
+};
+$('filterBtn').onclick = () => { onlyNew = !onlyNew; deck = onlyNew ? D.items.filter(c => !mastered(c.id)) : [...D.items]; idx = 0; render(); };
+$('autoSpeak').onchange = e => { prefs.autoSpeak = e.target.checked; savePrefs(); };
+$('rateSel').onchange = e => { prefs.rate = e.target.value; savePrefs(); };
+$('speakBtn').onclick = e => { e.stopPropagation(); speak(); };
+$('card').onclick = e => { if (prefs.mode !== 'dict' && !e.target.closest('button')) reveal(); };
+$('revealBtn').onclick = reveal;
+$('checkBtn').onclick = reveal;
+$('dictInput').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); reveal(); } };
+document.querySelectorAll('.rate').forEach(b => b.onclick = () => rate(b.dataset.rate));
+$('prevBtn').onclick = () => go(-1);
+$('nextBtn').onclick = () => go(1);
+$('resetBtn').onclick = () => {
+  if (!confirm(`確定清除「${D.title}」的所有熟記與複習紀錄？`)) return;
+  progress = {}; store.set(D.key, progress);
+  deck = [...D.items]; onlyNew = false; idx = 0; render(); renderList();
+};
+$('search').oninput = renderList;
+$('list').onclick = e => { const b = e.target.closest('[data-say]'); if (b) speak(D.items.find(i => i.id === +b.dataset.say).en); };
+$('copyBtn').onclick = () => navigator.clipboard.writeText($('tsv').value).then(() => alert('已複製，可貼上存成 .txt 匯入 Anki。'));
+$('dlBtn').onclick = () => {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([$('tsv').value], { type: 'text/plain;charset=utf-8' }));
+  a.download = `龍櫻_${D.title.replace(/\s|·/g, '')}_Anki匯入檔.txt`;
+  a.click(); URL.revokeObjectURL(a.href);
+};
+
+// 手機左右滑動切換卡片
+let sx = null, sy = null;
+$('card').addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+$('card').addEventListener('touchend', e => {
+  if (sx === null) return;
+  const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+  sx = null;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > 1.5 * Math.abs(dy)) go(dx < 0 ? 1 : -1);
+});
+
+document.addEventListener('keydown', e => {
+  if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName) || e.metaKey || e.ctrlKey) return;
+  if (!$('view-study').classList.contains('active')) return;
+  const k = e.key.toLowerCase();
+  if (e.code === 'Space') { e.preventDefault(); if (prefs.mode === 'dict' && !revealed) $('dictInput').focus(); else reveal(); }
+  else if (e.key === 'ArrowRight') go(1);
+  else if (e.key === 'ArrowLeft') go(-1);
+  else if ('1234'.includes(k) && k) rate(['again', 'hard', 'good', 'easy'][+k - 1]);
+  else if (k === 'r') speak();
+});
+
+$('deckSel').value = prefs.deck;
+loadDeck(+prefs.deck || 0);
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
 </body>
 </html>
