@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龍櫻 100 例句：勵志名言篇</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #2563eb15;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --border: #e2e8f0;
+            --again: #ef4444;
+            --hard: #f59e0b;
+            --good: #10b981;
+            --easy: #3b82f6;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+        header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .header-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+        .title-group h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .badge {
+            font-size: 0.75rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        .title-group p {
+            font-size: 0.875rem;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 10px;
+        }
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 16px;
+            border-radius: 7px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--card-bg);
+            color: var(--primary);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        }
+        .container {
+            max-width: 960px;
+            margin: 28px auto;
+            padding: 0 20px;
+        }
+        /* Controls Bar */
+        .controls-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+        .btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .btn-primary:hover {
+            opacity: 0.92;
+            background: var(--primary);
+        }
+        .stats-pills {
+            display: flex;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .pill {
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            color: var(--text-sub);
+        }
+        .pill.mastered { background: #d1fae5; color: #065f46; }
+        .pill.learning { background: #fef3c7; color: #92400e; }
+
+        /* Flashcard Area */
+        .card-stage {
+            perspective: 1200px;
+            margin-bottom: 24px;
+        }
+        .flashcard {
+            width: 100%;
+            min-height: 320px;
+            background: var(--card-bg);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            padding: 36px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            user-select: none;
+        }
+        .flashcard:hover {
+            box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.08);
+        }
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .card-num {
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 99px;
+            color: var(--text-main);
+        }
+        .speak-btn {
+            border: none;
+            background: var(--primary-light);
+            color: var(--primary);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.05rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s;
+        }
+        .speak-btn:hover {
+            transform: scale(1.08);
+        }
+        .card-body {
+            margin: 28px 0;
+            text-align: center;
+        }
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.45;
+        }
+        .answer-section {
+            margin-top: 26px;
+            padding-top: 24px;
+            border-top: 2px dashed var(--border);
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+        .answer-section.visible {
+            display: block;
+        }
+        .answer-text {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--primary);
+            line-height: 1.5;
+        }
+        .jp-ref {
+            margin-top: 12px;
+            font-size: 0.92rem;
+            color: var(--text-sub);
+        }
+        .card-hint {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Anki Rating Buttons */
+        .rating-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .rate-btn {
+            border: none;
+            padding: 14px 10px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: transform 0.12s, opacity 0.15s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        .rate-btn span.sub {
+            font-size: 0.72rem;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        .rate-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-2px);
+        }
+        .rate-again { background-color: var(--again); }
+        .rate-hard { background-color: var(--hard); }
+        .rate-good { background-color: var(--good); }
+        .rate-easy { background-color: var(--easy); }
+
+        .nav-Footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* List View & Export View */
+        .view-panel {
+            display: none;
+        }
+        .view-panel.active {
+            display: block;
+        }
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            background: var(--card-bg);
+        }
+        .table-wrap {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.92rem;
+            vertical-align: top;
+        }
+        th {
+            background: #f8fafc;
+            font-weight: 700;
+            color: var(--text-sub);
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background: #f8fafc;
+        }
+        .en-col {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .zh-col {
+            color: var(--text-sub);
+        }
+        .export-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        textarea.anki-tsv {
+            width: 100%;
+            height: 320px;
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: monospace;
+            font-size: 0.85rem;
+            background: #f8fafc;
+            resize: vertical;
+        }
+        @media (max-width: 640px) {
+            .flashcard { padding: 24px 20px; min-height: 280px; }
+            .question-text { font-size: 1.25rem; }
+            .answer-text { font-size: 1.15rem; }
+            .rating-bar { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="title-group">
+            <h1>龍櫻 100 例句：勵志名言篇 <span class="badge">教材 1 · 100 句</span></h1>
+            <p>已修正全部英文拼字與標點瑕疵 · 統一繁體中文與英文對照</p>
+        </div>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('study', this)">🗂️ ANKI 閃卡背誦</button>
+            <button class="tab-btn" onclick="switchTab('list', this)">📋 100句總覽清單</button>
+            <button class="tab-btn" onclick="switchTab('export', this)">📥 匯出至 Anki 軟體</button>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- TAB 1: ANKI STUDY VIEW -->
+    <div id="view-study" class="view-panel active">
+        <div class="controls-bar">
+            <div class="control-group">
+                <button class="btn" id="modeBtn" onclick="togglePromptMode()">🔄 出題方向：看中文 ➔ 背英文</button>
+                <button class="btn" onclick="shuffleDeck()">🔀 隨機洗牌</button>
+                <button class="btn" onclick="filterUnmastered()" id="filterBtn">🎯 只看未熟記：關</button>
+            </div>
+            <div class="stats-pills">
+                <span class="pill" id="stat-progress">進度: 1 / 100</span>
+                <span class="pill learning" id="stat-learning">待複習: 0</span>
+                <span class="pill mastered" id="stat-mastered">已熟記: 0</span>
+            </div>
+        </div>
+
+        <div class="card-stage">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="card-top">
+                    <span class="card-num" id="card-index">#001</span>
+                    <button class="speak-btn" onclick="speakCurrent(event)" title="朗讀英文例句 (快捷鍵 R)">🔊</button>
+                </div>
+                <div class="card-body">
+                    <div class="question-text" id="card-question">載入中...</div>
+                    <div class="answer-section" id="card-answer-sec">
+                        <div class="answer-text" id="card-answer"></div>
+                        <div class="jp-ref" id="card-jp"></div>
+                    </div>
+                </div>
+                <div class="card-hint" id="card-hint">點擊卡片或按 [空白鍵 Space] 翻開答案 · 按 [R] 發音 · 按 [1-4] 評分</div>
+            </div>
+        </div>
+
+        <div class="rating-bar">
+            <button class="rate-btn rate-again" onclick="rateCard('again')">
+                1. 重來 (Again)
+                <span class="sub">完全忘記・加入待複習</span>
+            </button>
+            <button class="rate-btn rate-hard" onclick="rateCard('hard')">
+                2. 困難 (Hard)
+                <span class="sub">有點卡住・需再加強</span>
+            </button>
+            <button class="rate-btn rate-good" onclick="rateCard('good')">
+                3. 良好 (Good)
+                <span class="sub">順利答出・標記熟記</span>
+            </button>
+            <button class="rate-btn rate-easy" onclick="rateCard('easy')">
+                4. 簡單 (Easy)
+                <span class="sub">秒答精通・標記熟記</span>
+            </button>
+        </div>
+
+        <div class="nav-Footer">
+            <button class="btn" onclick="prevCard()">⬅️ 上一張 (←)</button>
+            <button class="btn" onclick="resetProgress()">🗑️ 重設學習紀錄</button>
+            <button class="btn" onclick="nextCard()">下一張 (→) ➡️</button>
+        </div>
+    </div>
+
+    <!-- TAB 2: LIST VIEW -->
+    <div id="view-list" class="view-panel">
+        <input type="text" class="search-box" id="searchInput" placeholder="🔍 搜尋中英文關鍵字或題號..." oninput="renderList()">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th>英文例句 (已修正筆誤)</th>
+                        <th>繁體中文對照</th>
+                        <th style="width: 70px;">發音</th>
+                    </tr>
+                </thead>
+                <tbody id="listBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TAB 3: EXPORT VIEW -->
+    <div id="view-export" class="view-panel">
+        <div class="export-box">
+            <h3>📥 匯入至 Anki 桌面版 / AnkiDroid / AnkiMobile</h3>
+            <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 6px;">
+                您可以直接在本網頁使用上方的「ANKI 閃卡背誦」功能（學習進度會自動儲存在您的瀏覽器中），或者將下方整理好的中英對照資料匯出成 <code>.txt</code> (Tab 分隔檔)，直接匯入 Anki 軟體建立牌組。
+            </p>
+            <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="downloadAnkiTxt()">💾 下載 Anki 專用匯入檔 (.txt)</button>
+                <button class="btn" onclick="copyAnkiTsv()">📋 複製全部內容</button>
+            </div>
+            <textarea class="anki-tsv" id="ankiTsvArea" readonly></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = "anki_progress_" + "1_\u9f8d\u6afb100\u4f8b\u53e5_\u52f5\u5fd7\u540d\u8a00\u7bc7_ANKI\u4e2d\u82f1\u5c0d\u7167.html";
+    const HAS_JP = false;
+    const RAW_DATA = [{"id": 1, "en": "Education is the door to freedom.", "zh": "教育是通向自由之門。"}, {"id": 2, "en": "Challenges make life interesting.", "zh": "挑戰使生活變得有趣。"}, {"id": 3, "en": "Difficulties make life worth living.", "zh": "困難讓生活有價值。"}, {"id": 4, "en": "Nothing in the world can take the place of persistence.", "zh": "世界上沒有任何東西可以取代堅持。"}, {"id": 5, "en": "It’s impossible to defeat a person who never gives up.", "zh": "打敗一個永不放棄的人是不可能的。"}, {"id": 6, "en": "The most important thing in life is to have a great aim and the determination to attain it.", "zh": "生活中最重要的事情就是有一個遠大的目標，並有決心實現它。"}, {"id": 7, "en": "If you can dream it, you can do it.", "zh": "只要你想得到，你就做得到。"}, {"id": 8, "en": "Actions speak louder than words.", "zh": "行動比語言更具有說服力。"}, {"id": 9, "en": "Deeds are more powerful than words.", "zh": "行為比言語更強大。"}, {"id": 10, "en": "Mistakes show us what we still need to learn.", "zh": "從錯誤中我們知道該學什麼。"}, {"id": 11, "en": "Difficult times show us who our true friends are.", "zh": "艱難歲月讓我們知道誰是真正的朋友。／患難見真情。"}, {"id": 12, "en": "It doesn’t cost anything to be nice.", "zh": "做好人是不費吹灰之力的。"}, {"id": 13, "en": "Believe in what you can become.", "zh": "相信自己的潛力。"}, {"id": 14, "en": "Think and your mind will stay fresh.", "zh": "思考能使大腦保持清醒。"}, {"id": 15, "en": "You win because you think you can.", "zh": "你成功是因為你認為你能成功。"}, {"id": 16, "en": "By helping others, you will feel good about yourself.", "zh": "幫助他人，其樂無窮。"}, {"id": 17, "en": "Lost time is never found again.", "zh": "時間一去不復返。"}, {"id": 18, "en": "Rome wasn’t built in a day.", "zh": "羅馬不是一天建成的。"}, {"id": 19, "en": "Never put off until tomorrow what you can do today.", "zh": "永遠不要把今天能做的事拖延到明天。"}, {"id": 20, "en": "Remember to smile when you wake up.", "zh": "記得在醒來的時候微笑。"}, {"id": 21, "en": "Oversleeping will never make your dreams come true.", "zh": "睡懶覺永遠不能使你夢想成真。"}, {"id": 22, "en": "Praise twice as much as you criticize.", "zh": "多表揚，少批評。"}, {"id": 23, "en": "The way to be happy is to make others happy.", "zh": "快樂的方式就是先讓別人快樂。"}, {"id": 24, "en": "Life is too short to spend time worrying.", "zh": "生命太短了，不要花在焦慮上。"}, {"id": 25, "en": "What pains us trains us.", "zh": "使我們痛苦的東西在真正鍛造我們。"}, {"id": 26, "en": "What doesn’t kill us makes us stronger.", "zh": "沒有要我們命的事情讓我們更強大。"}, {"id": 27, "en": "What hurts us most teaches us the best.", "zh": "傷害我們最深的對我們教育最深。"}, {"id": 28, "en": "The dictionary is the only place where success comes before work.", "zh": "只有在字典中，成功才會出現在工作之前。"}, {"id": 29, "en": "To be a great leader, you must have great hopes!", "zh": "要想成為偉大的領導者，就必須有偉大的抱負。"}, {"id": 30, "en": "He who is ashamed of asking is ashamed of learning.", "zh": "恥於問者恥於學。"}, {"id": 31, "en": "He who fails to plan, plans to fail.", "zh": "不計畫的人是註定要失敗的。"}, {"id": 32, "en": "He who makes no mistakes makes nothing.", "zh": "不犯錯誤的人將一事無成。"}, {"id": 33, "en": "Imagination is more important than knowledge.", "zh": "想像力比知識更重要。"}, {"id": 34, "en": "The hotter the fire, the harder the steel.", "zh": "火燒得越旺，鋼鐵就越堅硬。"}, {"id": 35, "en": "Do not let what you cannot do interfere with what you can do.", "zh": "決不要讓你不能做的事妨礙你能做的事。"}, {"id": 36, "en": "It’s how you deal with failure that determines how you achieve success.", "zh": "你如何對待失敗註定了你如何取得成功。"}, {"id": 37, "en": "Help others achieve their dreams and you will achieve yours.", "zh": "幫助他人實現他們的夢想，而你也將因此實現你自己的夢想。"}, {"id": 38, "en": "The achievement of your goal is assured the moment you commit yourself to it.", "zh": "一旦你全心投入，你目標的實現就得到了保證。"}, {"id": 39, "en": "You become a winner the moment you believe you can win.", "zh": "當你相信自己能贏的時候，你就成為了勝利者。"}, {"id": 40, "en": "Time and energy spent worrying are wasted.", "zh": "擔憂煩惱，浪費時間，也是浪費精力。"}, {"id": 41, "en": "The best way to predict the future is to create it.", "zh": "預測未來的最佳方案就是創造未來。"}, {"id": 42, "en": "Your brain needs exercise to stay fit, just like your body.", "zh": "大腦需要鍛煉才能保持健康，就像你的身體一樣。"}, {"id": 43, "en": "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.", "zh": "我們最大的弱點就在於放棄。成功最有把握的方法就是盡力再試一次。"}, {"id": 44, "en": "Putting off an easy thing makes it hard. Putting off a hard thing makes it impossible.", "zh": "簡單的事情因為拖延而變得困難；困難的事情因為拖延而變得不可能（完成）。"}, {"id": 45, "en": "The only good luck many great men ever had was being born with the ability to overcome bad luck.", "zh": "對於許多偉大的人來說，他們唯一的幸運之處就是他們具有征服厄運的天賦。"}, {"id": 46, "en": "The greatest discovery of our generation is that a human being can alter his life by altering his attitudes.", "zh": "我們這一代人的最大發現就是：人類可以通過改變態度來改變自己的生活。"}, {"id": 47, "en": "It is not what happens to you; it is what you do with what happens to you.", "zh": "重要的不是在你身上發生了什麼，而是應變是你所做的事情。"}, {"id": 48, "en": "It is not what other people think of you, it is what you think of yourself that counts.", "zh": "重要的不是別人如何看待你，而是你如何看待你自己。"}, {"id": 49, "en": "As long as you are dreaming, believing, and doing, you can go anywhere and achieve anything.", "zh": "只要你有夢想、有信念、有行動，你就可以無往不利，無所不勝。"}, {"id": 50, "en": "Whatever you do, do it whole-heartedly.", "zh": "無論你做什麼，都要全心全意地做。"}, {"id": 51, "en": "Success is how high you bounce when you hit bottom.", "zh": "成功是墜落到底反彈的高度。"}, {"id": 52, "en": "Success is measured not by how much money you have made, but by how many people you have helped.", "zh": "衡量成功的標準不是看你賺了多少錢，而是看你幫助了多少人。"}, {"id": 53, "en": "Great works are performed not by strength, but by perseverance.", "zh": "完成偉大的事業不在於體力，而在於堅忍不拔的毅力。"}, {"id": 54, "en": "Man is not judged by his words, but by his deeds.", "zh": "評判一個人不是看他的言語，而是看他的行動。"}, {"id": 55, "en": "No one can humiliate or disturb us unless we let him.", "zh": "沒有任何人能侮辱我們、困擾我們，除非我們自己允許。"}, {"id": 56, "en": "No one can make you feel inferior without your consent.", "zh": "沒有你的同意，沒有人能讓你自卑。"}, {"id": 57, "en": "To reach your goals, work hard, participate, practice, and do the best you can.", "zh": "要達成你的目標，你就必須苦幹、參與、操練，以及盡你所能做到最好。"}, {"id": 58, "en": "Genius is the ability to put into effect what is in your mind.", "zh": "天才就是將心中所想付諸行動的能力。"}, {"id": 59, "en": "Life doesn’t require that we be the best, only that we try our best.", "zh": "生活並不要求我們是最好的，只要求我們能做到最好。"}, {"id": 60, "en": "The most important single ingredient in the formula of success is knowing how to get along with people.", "zh": "成功公式中最重要的一個因素就是知道如何與人相處。"}, {"id": 61, "en": "Success is not measured by the position you reach in life; it’s measured by the obstacles you overcome.", "zh": "成功不是用你一生取得的地位來衡量的，而是看你克服了多少障礙。"}, {"id": 62, "en": "It is in your moments of decision that your destiny is shaped.", "zh": "人生就註定於你做決定的那一刻。"}, {"id": 63, "en": "The surest way not to fail is to determine to succeed.", "zh": "不致失敗的最可靠的方法是決心成功。"}, {"id": 64, "en": "What would life be if we had no courage to attempt anything?", "zh": "如果我們對任何事情都沒有勇氣嘗試，人生還有什麼意義？"}, {"id": 65, "en": "The world belongs to the energetic.", "zh": "世界屬於充滿活力的人。"}, {"id": 66, "en": "Early to bed and early to rise keeps a man healthy, wealthy and wise.", "zh": "早睡早起讓人健康、富足和智慧。"}, {"id": 67, "en": "The human will can be strengthened like a muscle!", "zh": "人類的意志可以像肌肉一樣被增強。"}, {"id": 68, "en": "Success grows out of the struggle to overcome difficulties.", "zh": "成功來自於克服困難的鬥爭。"}, {"id": 69, "en": "Each day, take at least one step toward your goal. The step doesn’t have to be big, moving forward even a small amount is progress.", "zh": "每天至少向你的目標邁進一步。這一步不一定要很大，哪怕是向前一點，都是進步。"}, {"id": 70, "en": "Remind yourself to laugh and smile. You can always make room for happiness.", "zh": "提醒自己大笑、微笑。你總可以找到歡樂。"}, {"id": 71, "en": "Everyone is important. Anyone can change the world. No one should underestimate his power!", "zh": "人人都是重要的。任何人都可以改變世界。沒有人會低估他自己的力量。"}, {"id": 72, "en": "Only a fool criticizes what he does not understand.", "zh": "只有傻瓜才會批評他不懂的事。"}, {"id": 73, "en": "You don’t need an invitation to help others. Help before you are asked.", "zh": "幫助別人是不需要邀請的。在別人開口之前就伸出援助之手吧！"}, {"id": 74, "en": "Push yourself to do more than others believe you can do. Then, encourage others to push themselves just as hard.", "zh": "逼自己做出超越別人期望的事。然後，幫助別人也一樣努力去逼迫自己前進。"}, {"id": 75, "en": "The future belongs to those who believe in the beauty of their dreams.", "zh": "未來屬於那些相信自己夢想的人。"}, {"id": 76, "en": "Harsh advice is the most instructive.", "zh": "忠言逆耳利於行。"}, {"id": 77, "en": "Don’t wait for the world to change. Change it yourself.", "zh": "不要等待世界改變。去改變世界吧！"}, {"id": 78, "en": "The only true failure is the failure to try.", "zh": "惟一真正的失敗是沒有去嘗試。"}, {"id": 79, "en": "Nothing great was ever achieved without enthusiasm.", "zh": "無熱情無以成偉業。"}, {"id": 80, "en": "There is no challenge more challenging than improving yourself.", "zh": "沒什麼挑戰比提高自我更有挑戰。"}, {"id": 81, "en": "Confidence is contagious. So is lack of confidence.", "zh": "自信是具有感染力的。不自信也一樣。"}, {"id": 82, "en": "Confidence is half of victory.", "zh": "自信就是成功的一半。"}, {"id": 83, "en": "Attitude is just as important as ability.", "zh": "態度和能力一樣重要。"}, {"id": 84, "en": "You’re unique with special gifts; use them.", "zh": "你是獨一無二的，你有獨特的才能。發揮它們吧！"}, {"id": 85, "en": "We’re all capable if we have faith and passion.", "zh": "只要我們有信仰、有激情，我們就都是有能力的。"}, {"id": 86, "en": "Diligence is the mother of good luck.", "zh": "勤奮是好運之母。"}, {"id": 87, "en": "If you are doing your best, you will not have to worry about failure.", "zh": "如果你盡力而為，你就不必擔憂失敗。"}, {"id": 88, "en": "Those who turn back never reach the summit.", "zh": "中途折返的人永遠都達到不了頂峰。"}, {"id": 89, "en": "A winner never stops trying.", "zh": "成功者永不停止嘗試。"}, {"id": 90, "en": "The first and best victory is to conquer yourself.", "zh": "最重要的勝利是戰勝自己。"}, {"id": 91, "en": "Take chances, make mistakes. That’s how you grow.", "zh": "去冒險，去犯錯誤！你就是這樣成長起來的！"}, {"id": 92, "en": "True strength flows from a healthy body and mind working in harmony.", "zh": "真正的力量來自於健康身體和健康大腦的合作無間。"}, {"id": 93, "en": "Failure is the sauce that gives success its flavor.", "zh": "失敗是成功的調味品。"}, {"id": 94, "en": "Failure teaches you more than success.", "zh": "失敗的價值大於成功。／從失敗中，我們學到更多。"}, {"id": 95, "en": "Make full use of whatever happens to you. There is something to learn from every experience.", "zh": "充分利用發生在你身上的任何事情。任何的經歷都有值得學習的地方。"}, {"id": 96, "en": "Goodness is the only investment that never fails.", "zh": "善良是惟一不會失敗的投資。"}, {"id": 97, "en": "Life is a struggle that must be accepted. Accepting the struggle happily or miserably is up to you to decide.", "zh": "生活是你必須接受的鬥爭。快樂地接受還是悲慘地接受就要由你決定了。"}, {"id": 98, "en": "If you cannot be an excellent loser, you’ll never succeed.", "zh": "如果你不能成為一個優秀的失敗者，你就永遠不能成功！"}, {"id": 99, "en": "No matter how hard you try or how much time you spend worrying, some things just cannot be changed. Accept them and move on.", "zh": "不管你多麼努力地嘗試，不管你花多少時間擔憂，總有些事是無法改變的。接受它們，繼續前行吧！"}, {"id": 100, "en": "Continuous effort—not strength or intelligence—is the key to unlocking our potential.", "zh": "釋放潛能的關鍵不是力量，也不是智慧，而是不斷的努力。"}];
+
+    let deck = [...RAW_DATA];
+    let currentIndex = 0;
+    let isFlipped = false;
+    let promptZhToEn = true; // true: 看中背英, false: 看英背中
+    let onlyUnmastered = false;
+    let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+
+    function saveProgress() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        updateStats();
+    }
+
+    function updateStats() {
+        let mastered = 0;
+        let learning = 0;
+        Object.values(progress).forEach(st => {
+            if (st === 'good' || st === 'easy') mastered++;
+            if (st === 'again' || st === 'hard') learning++;
+        });
+        document.getElementById('stat-progress').textContent = `卡片: ${deck.length ? currentIndex + 1 : 0} / ${deck.length}`;
+        document.getElementById('stat-learning').textContent = `待複習: ${learning}`;
+        document.getElementById('stat-mastered').textContent = `已熟記: ${mastered}`;
+    }
+
+    function renderCard() {
+        const qEl = document.getElementById('card-question');
+        const aEl = document.getElementById('card-answer');
+        const jpEl = document.getElementById('card-jp');
+        const idxEl = document.getElementById('card-index');
+        const ansSec = document.getElementById('card-answer-sec');
+
+        if (deck.length === 0) {
+            idxEl.textContent = "完成！";
+            qEl.textContent = "🎉 太棒了！篩選範圍內的卡片已全部熟記！";
+            ansSec.classList.remove('visible');
+            updateStats();
+            return;
+        }
+
+        if (currentIndex >= deck.length) currentIndex = 0;
+        if (currentIndex < 0) currentIndex = deck.length - 1;
+
+        const item = deck[currentIndex];
+        const status = progress[item.id];
+        let statusTag = "";
+        if (status === 'good' || status === 'easy') statusTag = " · ✅ 已熟記";
+        else if (status === 'again' || status === 'hard') statusTag = " · 🔥 待複習";
+
+        idxEl.textContent = `#${String(item.id).padStart(3, '0')}${statusTag}`;
+
+        if (promptZhToEn) {
+            qEl.textContent = item.zh;
+            aEl.textContent = item.en;
+        } else {
+            qEl.textContent = item.en;
+            aEl.textContent = item.zh;
+        }
+
+        if (HAS_JP && item.jp) {
+            jpEl.textContent = `日文原句：${item.jp}`;
+        } else {
+            jpEl.textContent = "";
+        }
+
+        isFlipped = false;
+        ansSec.classList.remove('visible');
+        updateStats();
+    }
+
+    function flipCard() {
+        if (deck.length === 0) return;
+        isFlipped = !isFlipped;
+        const ansSec = document.getElementById('card-answer-sec');
+        if (isFlipped) {
+            ansSec.classList.add('visible');
+        } else {
+            ansSec.classList.remove('visible');
+        }
+    }
+
+    function nextCard() {
+        if (deck.length === 0) return;
+        currentIndex = (currentIndex + 1) % deck.length;
+        renderCard();
+    }
+
+    function prevCard() {
+        if (deck.length === 0) return;
+        currentIndex = (currentIndex - 1 + deck.length) % deck.length;
+        renderCard();
+    }
+
+    function rateCard(level) {
+        if (deck.length === 0) return;
+        const item = deck[currentIndex];
+        progress[item.id] = level;
+        saveProgress();
+
+        if (onlyUnmastered && (level === 'good' || level === 'easy')) {
+            deck = RAW_DATA.filter(c => progress[c.id] !== 'good' && progress[c.id] !== 'easy');
+            if (currentIndex >= deck.length) currentIndex = 0;
+            renderCard();
+        } else {
+            nextCard();
+        }
+    }
+
+    function togglePromptMode() {
+        promptZhToEn = !promptZhToEn;
+        const btn = document.getElementById('modeBtn');
+        btn.textContent = promptZhToEn ? "🔄 出題方向：看中文 ➔ 背英文" : "🔄 出題方向：看英文 ➔ 測中文";
+        renderCard();
+    }
+
+    function shuffleDeck() {
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+        currentIndex = 0;
+        renderCard();
+    }
+
+    function filterUnmastered() {
+        onlyUnmastered = !onlyUnmastered;
+        const btn = document.getElementById('filterBtn');
+        if (onlyUnmastered) {
+            deck = RAW_DATA.filter(c => progress[c.id] !== 'good' && progress[c.id] !== 'easy');
+            btn.textContent = "🎯 只看未熟記：開";
+            btn.classList.add('btn-primary');
+        } else {
+            deck = [...RAW_DATA];
+            btn.textContent = "🎯 只看未熟記：關";
+            btn.classList.remove('btn-primary');
+        }
+        currentIndex = 0;
+        renderCard();
+    }
+
+    function resetProgress() {
+        if (confirm("確定要清除本份教材的所有熟記與複習紀錄嗎？")) {
+            progress = {};
+            saveProgress();
+            if (onlyUnmastered) filterUnmastered();
+            renderCard();
+        }
+    }
+
+    function speakText(text) {
+        if (!('speechSynthesis' in window)) {
+            alert("您的瀏覽器不支援語音朗讀功能。");
+            return;
+        }
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = 'en-US';
+        utter.rate = 0.95;
+        window.speechSynthesis.speak(utter);
+    }
+
+    function speakCurrent(e) {
+        if (e) e.stopPropagation();
+        if (deck.length === 0) return;
+        speakText(deck[currentIndex].en);
+    }
+
+    function renderList() {
+        const q = (document.getElementById('searchInput').value || "").toLowerCase();
+        const tbody = document.getElementById('listBody');
+        tbody.innerHTML = "";
+        RAW_DATA.forEach(item => {
+            if (
+                String(item.id).includes(q) ||
+                item.en.toLowerCase().includes(q) ||
+                item.zh.toLowerCase().includes(q) ||
+                (item.jp && item.jp.toLowerCase().includes(q))
+            ) {
+                const tr = document.createElement('tr');
+                const jpLine = (HAS_JP && item.jp) ? `<div style="font-size:0.8rem;color:#94a3b8;margin-top:4px;">${item.jp}</div>` : '';
+                tr.innerHTML = `
+                    <td>#${String(item.id).padStart(3, '0')}</td>
+                    <td class="en-col">${item.en}</td>
+                    <td class="zh-col">${item.zh}${jpLine}</td>
+                    <td><button class="btn" onclick="speakText(${JSON.stringify(item.en).replace(/"/g, '&quot;')})">🔊</button></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        });
+    }
+
+    function initExportTsv() {
+        const lines = RAW_DATA.map(item => {
+            const front = item.zh;
+            const back = HAS_JP && item.jp ? `${item.en}<br><small style="color:gray">${item.jp}</small>` : item.en;
+            return `${front}\t${back}\t龍櫻100例句`;
+        });
+        document.getElementById('ankiTsvArea').value = lines.join('\n');
+    }
+
+    function copyAnkiTsv() {
+        const area = document.getElementById('ankiTsvArea');
+        area.select();
+        document.execCommand('copy');
+        alert("已複製到剪貼簿！可直接貼上存成 .txt 匯入 Anki。");
+    }
+
+    function downloadAnkiTxt() {
+        const content = document.getElementById('ankiTsvArea').value;
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "1_\u9f8d\u6afb100\u4f8b\u53e5_\u52f5\u5fd7\u540d\u8a00\u7bc7_ANKI\u4e2d\u82f1\u5c0d\u7167_Anki\u532f\u5165\u6a94.txt";
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function switchTab(tab, btn) {
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('view-' + tab).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+        if (!document.getElementById('view-study').classList.contains('active')) return;
+
+        if (e.code === 'Space') {
+            e.preventDefault();
+            flipCard();
+        } else if (e.code === 'ArrowRight') {
+            nextCard();
+        } else if (e.code === 'ArrowLeft') {
+            prevCard();
+        } else if (e.key === '1') {
+            rateCard('again');
+        } else if (e.key === '2') {
+            rateCard('hard');
+        } else if (e.key === '3') {
+            rateCard('good');
+        } else if (e.key === '4') {
+            rateCard('easy');
+        } else if (e.key.toLowerCase() === 'r') {
+            speakCurrent();
+        }
+    });
+
+    // Init
+    renderCard();
+    renderList();
+    initExportTsv();
+</script>
+</body>
+</html>
