@@ -1,5 +1,5 @@
 // 離線快取：先回快取、背景更新（stale-while-revalidate），下次開啟即為新版
-const CACHE = 'dragon-anki-v1';
+const CACHE = 'dragon-anki-v2';
 const FILES = ['./', 'index.html', 'data.js', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
